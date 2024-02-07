@@ -44,6 +44,7 @@ PyJWT
 pymacaroons
 PyNaCl
 pyparsing
+pyproject-toml
 pyRFC3339
 python-apt
 python-dateutil
