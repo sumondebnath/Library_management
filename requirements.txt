@@ -25,9 +25,9 @@ jeepney
 keyring
 
 launchpadlib
-
+importlib-metadata
 lazr.uri
-
+dbus-python
 macaroonbakery
 more-itertools
 netifaces
