@@ -1,7 +1,6 @@
 
 asgiref
 blinker
-Brlapi
 certifi
 chardet
 
