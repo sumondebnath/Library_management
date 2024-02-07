@@ -2,7 +2,7 @@
 asgiref
 attrs
 blinker
-Brlapi
+
 certifi
 chardet
 click
