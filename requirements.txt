@@ -1,4 +1,10 @@
 
+attrs
+jsonschema
+jsonschema-specifications
+referencing
+rpds-py
+
 asgiref
 blinker
 certifi
@@ -59,7 +65,7 @@ six
 sqlparse
 systemd-python
 typing_extensions
-
+toml
 urllib3
 virtualenv
 wadllib
