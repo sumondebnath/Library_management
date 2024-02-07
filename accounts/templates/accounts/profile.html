@@ -1,0 +1,63 @@
+{% extends "core/base.html" %}
+
+{% block body %}
+
+    <div class="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24 gap-10">
+        {% if usr.image %}
+        <div class="w-full lg:w-1/2 lg:py-6 text-center ">
+            <!-- <div class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6 bg-white rounded-2xl bg-opacity-70 mx-3"> -->
+            <img class ="rounded-full" src ="{{ usr.image.url }}" alt="profile image"/>
+        </div>
+        {% endif %}
+            
+        <div class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6 rounded-2xl bg-opacity-70 mx-3">
+            <h2 class="font-bold text-3xl my-4">{{usr.user.first_name}} {{usr.user.last_name}}</h2>
+            <h3 class="leading-normal mb-4 ms-4 font-bold">gender : {{usr.gender}}</h3>
+            <h3 class="leading-normal mb-4 font-bold">Date of Birth : {{usr.birth_date}}</h3>
+            <h4 class="leading-normal mb-4 font-bold">User : {{usr.user_type}}</h4>
+            <div class="flex justify-start w-full gap-x-10">
+                <a href="{% url 'edit_profile' %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Edit Profile</a>
+                <a href="{% url 'image' %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Set Image</a>
+                <a href="{% url 'password' %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Change Password</a>
+            </div>
+        </div>
+        
+    </div>
+{% if books %}
+    <div class="flex flex-col mb-24">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+            <div class="overflow-hidden">
+              <table class="min-w-full text-left text-sm font-light">
+                <thead class="border-b font-medium dark:border-neutral-500">
+                  <tr>
+                    <th scope="col" class="px-6 py-4">ID</th>
+                    <th scope="col" class="px-6 py-4">Book Name</th>
+                    <th scope="col" class="px-6 py-4">Price</th>
+                    <th scope="col" class="px-6 py-4">Balance</th>
+                    <th scope="col" class="px-6 py-4">Date</th>
+                    <th scope="col" class="px-6 py-4">Return</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                  <tr class="border-b dark:border-neutral-500">
+                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{book.borrowBook.id}}</td>
+                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowBook.title}}</td>
+                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowBook.borrowed_price}}</td>
+                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowUser.account.balance}}</td>
+                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowDate}}</td>
+                    <td><a href="{% url 'return' book.id %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Return</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+
+
+{% endblock body %}
