@@ -20,7 +20,7 @@ django-environ
 filelock
 httplib2
 idna
-importlib-metadata
+
 jeepney
 keyring
 
