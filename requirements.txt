@@ -40,13 +40,10 @@ protobuf
 psycopg2
 
 pycairo
-pycups
-PyGObject
 PyJWT
 pymacaroons
 PyNaCl
 pyparsing
-pyproject-toml
 pyRFC3339
 python-dateutil
 python-debian
