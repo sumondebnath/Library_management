@@ -48,7 +48,6 @@ PyNaCl
 pyparsing
 pyproject-toml
 pyRFC3339
-python-apt
 python-dateutil
 python-debian
 pytz
