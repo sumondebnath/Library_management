@@ -9,7 +9,6 @@ click
 colorama
 crispy-bootstrap5
 cryptography
-dbus-python
 defer
 distlib
 distro
