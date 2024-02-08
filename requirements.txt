@@ -60,15 +60,8 @@ rpds-py
 SecretStorage
 six
 sqlparse
-
-toml
-
-
 ufw
-
-
 virtualenv
-
 xdg
 xkit
 zipp
