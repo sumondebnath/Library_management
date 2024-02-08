@@ -24,7 +24,6 @@ jeepney
 jsonschema
 jsonschema-specifications
 keyring
-language-selector
 launchpadlib
 lazr.restfulclient
 lazr.uri
