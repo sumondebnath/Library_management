@@ -36,6 +36,10 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
+# deploy ar por csrf forbbiden error dele add kore
+
+CSRF_TRUSTED_ORIGINS = ['https://library-management-qonj.onrender.com','https://*.127.0.0.1']
+
 # Application definition
 
 INSTALLED_APPS = [
