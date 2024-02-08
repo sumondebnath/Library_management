@@ -62,7 +62,7 @@ six
 sqlparse
 
 toml
-typing_extensions
+
 
 ufw
 
