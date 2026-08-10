@@ -1,72 +1,118 @@
 {% extends "core/base.html" %}
 {% load static %}
 
-<div class="mb-0.5"> 
+{% block title %}Home | Library Management System{% endblock %}
 
-        {% block title %}Library Management System{% endblock %} {% block body %}
-        <div class="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24">
+{% block body %}
+{% with current_slug=request.resolver_match.kwargs.category_slug %}
 
-            
-            <div class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6 bg-white rounded-2xl bg-opacity-70 mx-3">
-                <h1 class="font-bold text-4xl my-4">Welcome to Our Library</h1>
-                <p class="leading-normal mb-4">
-                  At our library, we believe in the transformative power of knowledge. Our Library Management System is designed to facilitate seamless access to a world of literature and resources. Whether you're a student, a researcher, or an avid reader, we're here to support your quest for information and enlightenment.
-
-                </p>
-                <div class="flex justify-end w-full">
-                    <a href="{% url 'register' %}" class="bg-blue-900 text-white rounded mt-4 hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Register</a>
-                </div>
-            </div>
-            <div class="w-full lg:w-1/2 lg:py-6 text-center ">
-                <!-- <div class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6 bg-white rounded-2xl bg-opacity-70 mx-3"> -->
-                <img class ="rounded-2xl" src ="{% static './images/home.jpg' %}"/>
+<!-- Hero -->
+<section class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-10 lg:p-12 shadow-sm">
+    <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+        <div>
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
+                Discover Your Next Great Read
+            </h1>
+            <p class="mt-4 text-base text-gray-600 leading-relaxed">
+                Explore our collection of books and find something worth reading.
+                Borrow your favorites and read at your own pace.
+            </p>
+            <div class="mt-8">
+                <a href="#books" class="btn btn-primary btn-lg">Browse Books</a>
             </div>
         </div>
-
-    
-    <div class="flex mb-20 gap-x-40">
-        <div class="w-1/4 border-2 rounded-sm p-10 bg-white m-5">
-            {% for cate in categories %}
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="category" id="{{cate.id}}">
-                <label class="form-check-label" for="{{cate.id}}">
-                <a class="text-decoration-none" href="{% url 'book' cate.slug %}">{{cate.name}}</a>
-                </label>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="w-2/4 ">
-            {% for book in books %}
-                <div class="max-w-sm w-full lg:max-w-full lg:flex my-5">
-                    <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style="background-image: url('{{book.book_image.url}}')" title="Woman holding a mug">
-                    </div>
-                    <div class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-                      <div class="mb-8">
-                        <p class="text-sm text-gray-600 flex items-center">
-                          <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
-                          </svg>
-                          Logged In only
-                        </p>
-                        <div class="text-gray-900 font-bold text-xl mb-2">{{book.title}}</div>
-                        <p class="text-gray-700 text-base">{{book.description | truncatewords:10}}</p>
-                      </div>
-                      <div class="flex items-center">
-                        <p class="text-gray-900 leading-none">Price : {{book.borrowed_price}} BDT</p>
-                        <div class="text-sm">
-                          <!-- <p class="text-gray-900 leading-none">Price : {{book.borrowed_price}} BDT</p> -->
-                          <a href="{% url 'details' book.id %}" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 mx-6 border border-blue-500 hover:border-transparent rounded">
-                            Details
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-            {% endfor %}
+        <div class="hidden md:block">
+            <img src="{% static 'images/home.jpg' %}" alt="A warm library reading space" class="w-full h-56 object-cover rounded-xl" />
         </div>
     </div>
-</div>
+</section>
 
+<!-- Book listing -->
+<section id="books" class="mt-10 sm:mt-12">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900">
+                {% if current_slug %}
+                    {% for c in categories %}{% if c.slug == current_slug %}{{ c.name }}{% endif %}{% endfor %}
+                {% else %}
+                    All Books
+                {% endif %}
+            </h2>
+            <p class="text-sm text-gray-500 mt-1">{{ books|length }} book{{ books|length|pluralize }} available</p>
+        </div>
+    </div>
 
+    <!-- Category navigation -->
+    {% if categories %}
+    <nav class="flex flex-wrap gap-2 mb-8" aria-label="Filter books by category">
+        <a href="{% url 'home' %}" class="px-4 py-1 rounded-full text-sm font-medium border transition-colors
+            {% if not current_slug %} bg-blue-900 border-blue-900 text-white
+            {% else %} bg-white border-gray-200 text-gray-600 hover:border-blue-300 hover:text-blue-900 {% endif %}">
+            All Books
+        </a>
+        {% for c in categories %}
+        <a href="{% url 'book' c.slug %}" class="px-4 py-1 rounded-full text-sm font-medium border transition-colors
+            {% if current_slug == c.slug %} bg-blue-900 border-blue-900 text-white
+            {% else %} bg-white border-gray-200 text-gray-600 hover:border-blue-300 hover:text-blue-900 {% endif %}">
+            {{ c.name }}
+        </a>
+        {% endfor %}
+    </nav>
+    {% endif %}
 
+    <!-- Book grid -->
+    {% if books %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for book in books %}
+        <article class="card flex flex-col overflow-hidden hover:shadow-md transition-shadow duration-200">
+            <a href="{% url 'details' book.id %}" class="block relative">
+                {% if book.book_image %}
+                <img src="{{ book.book_image.url }}" alt="Cover of {{ book.title }}" class="w-full h-48 object-cover" />
+                {% else %}
+                <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">No cover available</div>
+                {% endif %}
+                <span class="absolute inset-x-0 top-0 flex justify-end p-3">
+                    <span class="badge badge-green">Available</span>
+                </span>
+            </a>
+            <div class="flex flex-col flex-1 p-4 sm:p-5">
+                <div class="flex flex-wrap gap-1.5 mb-2">
+                    {% for cat in book.categories.all %}
+                        <span class="badge badge-blue">{{ cat.name }}</span>
+                    {% empty %}
+                        <span class="badge badge-gray">General</span>
+                    {% endfor %}
+                </div>
+                <h3 class="text-base font-semibold text-gray-900 leading-snug">
+                    <a href="{% url 'details' book.id %}" class="hover:text-blue-800">{{ book.title }}</a>
+                </h3>
+                <p class="text-sm text-gray-500 mt-1 line-clamp-2">{{ book.description|truncatewords:20 }}</p>
+                <p class="text-xs text-gray-400 mt-2">Added {{ book.borrowed_date|date:"M d, Y" }}</p>
+
+                <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-500">Borrow price</p>
+                        <p class="text-lg font-bold text-gray-900">{{ book.borrowed_price }} BDT</p>
+                    </div>
+                    <a href="{% url 'details' book.id %}" class="btn btn-secondary btn-sm">Details</a>
+                </div>
+
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary btn-block mt-3">Borrow {{ book.borrowed_price }} BDT</a>
+                {% else %}
+                <a href="{% url 'log_in' %}?next={{ request.path }}" class="btn btn-secondary btn-block mt-3">Login to Borrow</a>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card p-10 text-center">
+        <p class="text-gray-500">No books available in this category yet.</p>
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-4">View All Books</a>
+    </div>
+    {% endif %}
+</section>
+
+{% endwith %}
 {% endblock body %}

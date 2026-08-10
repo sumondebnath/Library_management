@@ -1,34 +1,26 @@
 {% extends "core/base.html" %}
 
-{% block title %}
-Deposite
-{% endblock %} 
+{% block title %}Deposit | Library Management System{% endblock %}
+
 {% block body %}
+<div class="max-w-lg mx-auto mb-16">
+    <div class="card p-5 bg-blue-900 border-blue-900 text-white mb-6">
+        <p class="text-sm text-blue-200">Current Balance</p>
+        <p class="text-3xl font-bold mt-1">{{ request.user.account.balance }} BDT</p>
+    </div>
 
+    <div class="card p-6 sm:p-8">
+        <h1 class="text-xl font-bold text-gray-900">Add Funds</h1>
+        <p class="text-sm text-gray-500 mt-1">Deposit money to your library account to borrow books.</p>
 
-<div class="w-full flex mt-5 justify-center ">
-    <div class="bg-white w-5/12 rounded-lg">
-        
-        <h1 class="font-bold text-3xl text-center pb-5 pt-10 px-5">Deposite</h1>
-        <form method="post" class="px-8 pt-6 pb-8 mb-4">
+        <form method="post" novalidate class="mt-6">
             {% csrf_token %}
+            <label for="amount" class="field-label">Deposit Amount (BDT)</label>
+            <input type="number" name="amount" id="amount" min="0" step="0.01" required placeholder="e.g. 500" class="field-input" />
+            {% for error in form.amount.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
 
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="amount">
-                    Amount
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline" name="amount" id="amount" type="number" required placeholder="Amount">
-            </div>
-            {% if form.amount.errors %} {% for error in form.amount.errors %}
-            <p class="text-red-600 text-sm italic pb-2">{{ error }}</p>
-            {% endfor %} {% endif %}
-            <div class="flex w-full justify-center">
-                <button class="bg-blue-900 text-white hover:text-blue-900 hover:bg-white border border-blue-900 font-bold px-4 py-2 rounded-lg" type="submit">
-                Submit
-            </button>
-            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg mt-6">Deposit</button>
         </form>
     </div>
-    
 </div>
-{% endblock %}
+{% endblock body %}

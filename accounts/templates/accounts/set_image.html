@@ -1,33 +1,55 @@
 {% extends "core/base.html" %}
 
-{% block title %}
-Image
-{% endblock %} 
+{% block title %}Update Profile Image | Library Management System{% endblock %}
+
 {% block body %}
+{% with account=request.user.account %}
+<div class="max-w-lg mx-auto mb-16">
+    <div class="card p-6 sm:p-8">
+        <h1 class="text-xl font-bold text-gray-900">Update Profile Image</h1>
+        <p class="text-sm text-gray-500 mt-1">Choose a new profile photo. It will be shown on your profile page.</p>
 
-<div class="w-full flex mt-5 justify-center ">
-    <div class="bg-white w-5/12 rounded-lg">
-        
-        <h1 class="font-bold text-3xl text-center pb-5 pt-10 px-5">Set Image</h1>
-        <form method="post" enctype="multipart/form-data" class="px-8 pt-6 pb-8 mb-4">
-            {% csrf_token %}
-
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
-                    Image
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline" name="image" id="image" type="file">
+        <div class="mt-6 flex justify-center">
+            <img id="preview" src="{% if account.image %}{{ account.image.url }}{% endif %}"
+                 alt="Current profile image"
+                 class="h-24 w-24 rounded-full object-cover border-4 border-gray-100 shadow-sm {% if not account.image %}hidden{% endif %}" />
+            <div id="preview-placeholder" class="h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 {% if account.image %}hidden{% endif %}">
+                No image
             </div>
-            {% if form.image.errors %} {% for error in form.image.errors %}
-            <p class="text-red-600 text-sm italic pb-2">{{ error }}</p>
-            {% endfor %} {% endif %}
-            <div class="flex w-full justify-center">
-                <button class="bg-blue-900 text-white hover:text-blue-900 hover:bg-white border border-blue-900 font-bold px-4 py-2 rounded-lg" type="submit">
-                Set
-            </button>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="mt-6">
+            {% csrf_token %}
+            <label for="{{ form.image.id_for_label }}" class="field-label">{{ form.image.label }}</label>
+            {{ form.image }}
+            {% for error in form.image.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+
+            <div class="flex gap-3 mt-6">
+                <button type="submit" class="btn btn-primary">Update Image</button>
+                <a href="{% url 'profile' %}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
-    
 </div>
-{% endblock %}
+{% endwith %}
+
+<script>
+(function () {
+    var input = document.querySelector('input[type="file"]');
+    var img = document.getElementById('preview');
+    var placeholder = document.getElementById('preview-placeholder');
+    if (!input || !img) return;
+    input.addEventListener('change', function () {
+        var file = input.files && input.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result;
+            img.classList.remove('hidden');
+            if (placeholder) placeholder.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    });
+})();
+</script>
+{% endblock body %}

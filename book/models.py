@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from category.models import Category
-from book.constants import RATING
 from accounts.models import UserAccount
 
 # Create your models here.
@@ -31,6 +30,6 @@ class BookReview(models.Model):
 
 
 class BorrowBooK(models.Model):
-    borrowUser = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    borrowUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="borrowed_books")
     borrowBook = models.ForeignKey(Book, on_delete= models.CASCADE)
     borrowDate = models.DateTimeField(auto_now_add=True)

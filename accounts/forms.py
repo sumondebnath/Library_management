@@ -5,10 +5,10 @@ from accounts.models import UserAccount
 from accounts.constants import GENDER_TYPE, USER_TYPE
 
 class UserRegistrationForm(UserCreationForm):
+    email = forms.EmailField()
     birth_date = forms.DateField(widget=forms.DateInput(attrs={"type":"date"}))
     gender = forms.ChoiceField(choices=GENDER_TYPE)
     user_type = forms.ChoiceField(choices=USER_TYPE)
-    # image = forms.FileField(widget=forms.FileInput())
 
     class Meta:
         model = User
@@ -16,20 +16,13 @@ class UserRegistrationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        if commit == True:
+        if commit:
             user.save()
-            birth_date = self.cleaned_data.get("birth_date")
-            gender = self.cleaned_data.get("gender")
-            user_type = self.cleaned_data.get("user_type")
-            # image = self.cleaned_data.get("image")
-
-            UserAccount.objects.create(
-                user = user,
-                birth_date = birth_date,
-                gender = gender,
-                user_type=user_type,
-                # image=image,
-            )
+            user_account, created = UserAccount.objects.get_or_create(user=user)
+            user_account.birth_date = self.cleaned_data["birth_date"]
+            user_account.gender = self.cleaned_data["gender"]
+            user_account.user_type = self.cleaned_data["user_type"]
+            user_account.save()
         return user
     
     def __init__(self, *args, **kwargs):
@@ -37,12 +30,7 @@ class UserRegistrationForm(UserCreationForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({
-                "class" : (
-                    'appearance-none block w-full bg-gray-200 '
-                    'text-gray-700 border border-gray-200 rounded '
-                    'py-3 px-4 leading-tight focus:outline-none '
-                    'focus:bg-white focus:border-gray-500'
-                )
+                "class": "field-input"
             })
     
 
@@ -50,6 +38,9 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = UserAccount
         fields = ["image"]
+        widgets = {
+            "image": forms.ClearableFileInput(attrs={"class": "field-input"}),
+        }
 
 
 
@@ -68,12 +59,7 @@ class UserUpdateForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({
-                "class" : (
-                    'appearance-none block w-full bg-gray-200 '
-                    'text-gray-700 border border-gray-200 rounded '
-                    'py-3 px-4 leading-tight focus:outline-none '
-                    'focus:bg-white focus:border-gray-500'
-                )
+                "class": "field-input"
             })
 
         if self.instance:

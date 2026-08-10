@@ -1,63 +1,163 @@
-{% extends "core/base.html" %}
-
-{% block body %}
-
-    <div class="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24 gap-10">
-        {% if usr.image %}
-        <div class="w-full lg:w-1/2 lg:py-6 text-center ">
-            <!-- <div class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6 bg-white rounded-2xl bg-opacity-70 mx-3"> -->
-            <img class ="rounded-full" src ="{{ usr.image.url }}" alt="profile image"/>
-        </div>
-        {% endif %}
-            
-        <div class="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6 rounded-2xl bg-opacity-70 mx-3">
-            <h2 class="font-bold text-3xl my-4">{{usr.user.first_name}} {{usr.user.last_name}}</h2>
-            <h3 class="leading-normal mb-4 ms-4 font-bold">gender : {{usr.gender}}</h3>
-            <h3 class="leading-normal mb-4 font-bold">Date of Birth : {{usr.birth_date}}</h3>
-            <h4 class="leading-normal mb-4 font-bold">User : {{usr.user_type}}</h4>
-            <div class="flex justify-start w-full gap-x-10">
-                <a href="{% url 'edit_profile' %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Edit Profile</a>
-                <a href="{% url 'image' %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Set Image</a>
-                <a href="{% url 'password' %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Change Password</a>
-            </div>
-        </div>
-        
+{% extends "core/base.html" %} {% block title %}My Profile | Library Management
+System{% endblock %} {% block body %}
+<!-- Profile header -->
+<div class="card p-6 sm:p-8">
+  <div class="flex flex-col sm:flex-row items-center gap-6">
+    {% if usr.image %}
+    <img
+      src="{{ usr.image.url }}"
+      alt="Profile image of {{ usr.user.first_name }} {{ usr.user.last_name }}"
+      class="h-24 w-24 rounded-full object-cover border-4 border-gray-100 shadow-sm"
+    />
+    {% else %}
+    <div
+      class="h-24 w-24 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-2xl font-bold flex-shrink-0"
+    >
+      {{ usr.user.first_name|slice:":1" }}{{ usr.user.last_name|slice:":1" }}
     </div>
-{% if books %}
-    <div class="flex flex-col mb-24">
-        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-            <div class="overflow-hidden">
-              <table class="min-w-full text-left text-sm font-light">
-                <thead class="border-b font-medium dark:border-neutral-500">
-                  <tr>
-                    <th scope="col" class="px-6 py-4">ID</th>
-                    <th scope="col" class="px-6 py-4">Book Name</th>
-                    <th scope="col" class="px-6 py-4">Price</th>
-                    <th scope="col" class="px-6 py-4">Balance</th>
-                    <th scope="col" class="px-6 py-4">Date</th>
-                    <th scope="col" class="px-6 py-4">Return</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {% for book in books %}
-                  <tr class="border-b dark:border-neutral-500">
-                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{book.borrowBook.id}}</td>
-                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowBook.title}}</td>
-                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowBook.borrowed_price}}</td>
-                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowUser.account.balance}}</td>
-                    <td class="whitespace-nowrap px-6 py-4">{{book.borrowDate}}</td>
-                    <td><a href="{% url 'return' book.id %}" class="bg-blue-900 text-white rounded hover:bg-white hover:text-blue-900 hover:border-blue-900 shadow hover:shadow-lg py-2 px-4 border border-gray-900 hover:border-transparent">Return</a></td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
     {% endif %}
-    
+    <div class="text-center sm:text-left">
+      <h1 class="text-2xl font-bold text-gray-900">
+        {{ usr.user.first_name }} {{ usr.user.last_name }}
+      </h1>
+      <p class="text-sm text-gray-500 mt-1">{{ usr.user.email }}</p>
+      <div class="flex flex-wrap justify-center sm:justify-start gap-1.5 mt-3">
+        <span class="badge badge-blue">{{ usr.user_type }}</span>
+        <span class="badge badge-gray">{{ usr.gender }}</span>
+      </div>
+    </div>
+    <div class="sm:ml-auto flex flex-wrap justify-center gap-2">
+      <a href="{% url 'edit_profile' %}" class="btn btn-secondary btn-sm"
+        >Edit Profile</a
+      >
+      <a href="{% url 'image' %}" class="btn btn-secondary btn-sm">Set Image</a>
+      <a href="{% url 'password' %}" class="btn btn-secondary btn-sm"
+        >Change Password</a
+      >
+    </div>
+  </div>
+</div>
 
+<!-- Account summary -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+  <div class="card p-5 bg-blue-900 border-blue-900 text-white">
+    <p class="text-sm text-blue-500">Available Balance</p>
+    <p class="text-3xl font-bold mt-1 text-black">{{ usr.balance }} BDT</p>
+    <a
+      href="{% url 'deposite' %}"
+      class="inline-block mt-1 text-sm font-medium text-blue-500 hover:text-blue-300 hover:underline"
+      >Deposit money</a
+    >
+  </div>
+  <div class="card p-5">
+    <p class="text-sm text-gray-500">Currently Borrowed</p>
+    <p class="text-3xl font-bold text-gray-900 mt-1">{{ books|length }}</p>
+  </div>
+  <div class="card p-5">
+    <p class="text-sm text-gray-500">Member Since</p>
+    <p class="text-3xl font-bold text-gray-900 mt-1">
+      {{ usr.initial_date|date:"M Y" }}
+    </p>
+  </div>
+</div>
 
+<!-- Borrowed books -->
+<section class="mt-10">
+  <h2 class="text-xl font-bold text-gray-900">Borrowed Books</h2>
+
+  {% if books %}
+  <div class="card overflow-hidden mt-4">
+    <div class="overflow-x-auto hidden md:block">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+            >
+              Book
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+            >
+              Price
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+            >
+              Borrowed On
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500"
+            >
+              Action
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          {% for book in books %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4">
+              <a
+                href="{% url 'details' book.borrowBook.id %}"
+                class="font-medium text-gray-900 hover:text-blue-800"
+                >{{ book.borrowBook.title }}</a
+              >
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600 whitespace-no-wrap">
+              {{ book.borrowBook.borrowed_price }} BDT
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500 whitespace-no-wrap">
+              {{ book.borrowDate|date:"M d, Y h:i A" }}
+            </td>
+            <td class="px-6 py-4 text-right">
+              <a
+                href="{% url 'return' book.id %}"
+                class="btn btn-secondary btn-sm"
+                onclick="return confirm('Return this book?');"
+                >Return Book</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="md:hidden divide-y divide-gray-100">
+      {% for book in books %}
+      <li class="p-4">
+        <div class="flex items-center justify-between gap-3">
+          <a
+            href="{% url 'details' book.borrowBook.id %}"
+            class="font-medium text-gray-900"
+            >{{ book.borrowBook.title }}</a
+          >
+          <span class="text-sm text-gray-600 flex-shrink-0"
+            >{{ book.borrowBook.borrowed_price }} BDT</span
+          >
+        </div>
+        <p class="text-xs text-gray-500 mt-1">
+          Borrowed {{ book.borrowDate|date:"M d, Y h:i A" }}
+        </p>
+        <a
+          href="{% url 'return' book.id %}"
+          class="btn btn-secondary btn-sm mt-3"
+          onclick="return confirm('Return this book?');"
+          >Return Book</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% else %}
+  <div class="card p-10 text-center mt-4">
+    <p class="text-gray-500">You haven't borrowed any books yet.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary mt-4">Browse Books</a>
+  </div>
+  {% endif %}
+</section>
 {% endblock body %}
