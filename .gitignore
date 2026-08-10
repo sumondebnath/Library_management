@@ -1,13 +1,25 @@
-.venv
-.vscode
-.cph/
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+djEnv/
+
+# Environment
+.env
+.env/
+
+# Database
+# *.sqlite3
+# db.sqlite3
+
+# Media / Static
+# media/
+# staticfiles/
+
+# Editors / OS
 .vscode/
+.cph/
 *.exe
 *.bin
-djEnv
-djEnv/
-.venv/
-MamarBank/.env/
-.env/
-.env
-libraryManagementSystem/.env
