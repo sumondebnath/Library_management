@@ -14,19 +14,32 @@ from accounts.forms import ImageForm, UserRegistrationForm, UserUpdateForm
 from accounts.models import UserAccount
 from book.models import BorrowBooK
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 
 def send_transaction_mail(user, amount, subject, template):
     if not user.email:
         return
-    message = render_to_string(template, {
-        "user": user,
-        "amount": amount,
-    })
-    send_mail = EmailMultiAlternatives(subject, "", to=[user.email])
-    send_mail.attach_alternative(message, "text/html")
-    send_mail.send()
+
+    try:
+        message = render_to_string(template, {
+            "user": user,
+            "amount": amount,
+        })
+        send_mail = EmailMultiAlternatives(subject, "", to=[user.email])
+        send_mail.attach_alternative(message, "text/html")
+        send_mail.send()
+
+    except Exception:
+        logger.exception(
+            "Failed to send email to %s: %s",
+            user.email,
+            subject,
+        )
 
 
 class RegistrationView(FormView):
