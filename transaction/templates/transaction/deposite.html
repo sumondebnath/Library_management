@@ -1,26 +1,40 @@
-{% extends "core/base.html" %}
-
-{% block title %}Deposit | Library Management System{% endblock %}
-
-{% block body %}
+{% extends "core/base.html" %} {% block title %}Deposit | Library Management
+System{% endblock %} {% block body %}
 <div class="max-w-lg mx-auto mb-16">
-    <div class="card p-5 bg-blue-900 border-blue-900 text-white mb-6">
-        <p class="text-sm text-blue-400">Current Balance</p>
-        <p class="text-3xl font-bold mt-1 text-black">{{ request.user.account.balance }} BDT</p>
-    </div>
+  <div class="card p-5 bg-blue-900 border-blue-900 text-white mb-6">
+    <p class="text-sm text-blue-400">Current Balance</p>
+    <p class="text-3xl font-bold mt-1 text-black">
+      {{ request.user.account.balance }} BDT
+    </p>
+  </div>
 
-    <div class="card p-6 sm:p-8">
-        <h1 class="text-xl font-bold text-gray-900">Add Funds</h1>
-        <p class="text-sm text-gray-500 mt-1">Deposit money to your library account to borrow books.</p>
+  <div class="card p-6 sm:p-8">
+    <h1 class="text-xl font-bold text-gray-900">Add Funds</h1>
+    <p class="text-sm text-gray-500 mt-1">
+      Deposit money to your library account to borrow books.
+    </p>
 
-        <form method="post" novalidate class="mt-6">
-            {% csrf_token %}
-            <label for="amount" class="field-label">Deposit Amount (BDT)</label>
-            <input type="number" name="amount" id="amount" min="0" step="0.01" required placeholder="e.g. 500" class="field-input" />
-            {% for error in form.amount.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+    <form method="post" novalidate class="mt-6">
+      {% csrf_token %}
+      <label for="amount" class="field-label">Deposit Amount (BDT)</label>
+      <input
+        type="number"
+        name="amount"
+        id="amount"
+        min="0"
+        step="0.01"
+        required
+        placeholder="e.g. 500"
+        class="field-input"
+      />
+      {% for error in form.amount.errors %}
+      <p class="field-error">{{ error }}</p>
+      {% endfor %}
 
-            <button type="submit" class="btn btn-primary btn-block btn-lg mt-6">Deposit</button>
-        </form>
-    </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg mt-6">
+        Deposit
+      </button>
+    </form>
+  </div>
 </div>
 {% endblock body %}
