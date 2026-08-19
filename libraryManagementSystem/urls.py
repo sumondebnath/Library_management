@@ -18,7 +18,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from core.views import home
+from core.views import home, Health_Check
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,6 +26,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", home, name="home"),
+    path("health/", Health_Check, name="health"),
     path("books/<slug:category_slug>/", home, name="book"),
     path("account/", include("accounts.urls")),
     path("book/", include("book.urls")),
