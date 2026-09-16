@@ -1,5 +1,6 @@
 """Django settings for libraryManagementSystem project."""
 
+import os
 from pathlib import Path
 
 import environ
@@ -15,9 +16,18 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", default=True)
 
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+# ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".vercel.app", 
+]
 
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["https://library-management-qonj.onrender.com","https://*.library-management-qonj.onrender.com",])
+# CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["https://library-management-qonj.onrender.com","https://*.library-management-qonj.onrender.com",])
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+]
 
 # Application definition
 
@@ -69,6 +79,11 @@ WSGI_APPLICATION = 'libraryManagementSystem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+# DATABASE_URL = os.environ.get("DATABASE_URL")
+# if not DATABASE_URL:
+#     raise RuntimeError("DATABASE_URL is not set. Check Vercel environment variables.")
+
 
 DATABASES = {
     'default': env.db("DATABASE_URL", default="sqlite:///" + str(BASE_DIR / 'db.sqlite3')),
