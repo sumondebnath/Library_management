@@ -85,8 +85,15 @@ WSGI_APPLICATION = 'libraryManagementSystem.wsgi.application'
 #     raise RuntimeError("DATABASE_URL is not set. Check Vercel environment variables.")
 
 
+# DATABASES = {
+#     'default': env.db("DATABASE_URL", default="sqlite:///" + str(BASE_DIR / 'db.sqlite3')),
+# }
+
 DATABASES = {
-    'default': env.db("DATABASE_URL", default="sqlite:///" + str(BASE_DIR / 'db.sqlite3')),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
 
 
