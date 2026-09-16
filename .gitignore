@@ -23,3 +23,15 @@ djEnv/
 .cph/
 *.exe
 *.bin
+
+
+build.sh
+render.yaml
+.kilo
+
+build.sh/
+render.yaml/
+.kilo/
+
+data.json
+data.json/
