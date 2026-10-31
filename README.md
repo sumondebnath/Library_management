@@ -55,39 +55,44 @@ Library_management/
 2. Create a virtual environment and activate it:
 
 Linux / macOS:
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
 Windows:
+
 ```bat
 py -m venv .venv
 .venv\Scripts\activate
 ```
 
 3. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 4. Create your environment file:
+
 ```bash
 cp .env.example .env
 ```
+
 Then fill in `SECRET_KEY`, `EMAIL`, and `EMAIL_PASSWORD`.
 
 ## Environment Variables
 
-| Variable | Description |
-|---|---|
-| `SECRET_KEY` | Django secret key. Use a long random value in production. |
-| `DJANGO_DEBUG` | `True` in development, `False` in production. Defaults to `True`. |
-| `DJANGO_ALLOWED_HOSTS` | Comma-separated hostnames. Defaults to `localhost,127.0.0.1`. |
-| `CSRF_TRUSTED_ORIGINS` | Comma-separated HTTPS origins, e.g. `https://your-app.onrender.com`. |
-| `EMAIL` / `EMAIL_PASSWORD` | Gmail address and App Password used for notifications. |
-| `DATABASE_URL` | Database connection string. Leave empty for local SQLite, or use `postgres://USER:PASSWORD@HOST:5432/DBNAME`. |
-| `DJANGO_MEDIA_ROOT` | Optional override for the uploads directory. |
+| Variable                   | Description                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `SECRET_KEY`               | Django secret key. Use a long random value in production.                                                     |
+| `DJANGO_DEBUG`             | `True` in development, `False` in production. Defaults to `True`.                                             |
+| `DJANGO_ALLOWED_HOSTS`     | Comma-separated hostnames. Defaults to `localhost,127.0.0.1`.                                                 |
+| `CSRF_TRUSTED_ORIGINS`     | Comma-separated HTTPS origins, e.g. `https://your-app.vercel.app`.                                            |
+| `EMAIL` / `EMAIL_PASSWORD` | Gmail address and App Password used for notifications.                                                        |
+| `DATABASE_URL`             | Database connection string. Leave empty for local SQLite, or use `postgres://USER:PASSWORD@HOST:5432/DBNAME`. |
+| `DJANGO_MEDIA_ROOT`        | Optional override for the uploads directory.                                                                  |
 
 Never commit your real `.env` file.
 
@@ -138,7 +143,7 @@ The suite covers registration, login-protection, profile, return ownership, borr
 4. Configure the environment variables described above. Important production values:
    - `DJANGO_DEBUG=False`
    - `DJANGO_ALLOWED_HOSTS=your-app.onrender.com`
-   - `CSRF_TRUSTED_ORIGINS=https://your-app.onrender.com`
+   - `CSRF_TRUSTED_ORIGINS=https://your-app.vercel.app`
    - `DATABASE_URL` — from the Render PostgreSQL instance
    - `SECRET_KEY` — a long random value (e.g. `python -c "import secrets; print(secrets.token_urlsafe(50))"`)
    - `EMAIL`, `EMAIL_PASSWORD`
@@ -147,7 +152,7 @@ The suite covers registration, login-protection, profile, return ownership, borr
 7. `build.sh` runs `pip install`, `collectstatic`, and `migrate` automatically on each deploy.
 8. After the first deploy, create an admin user with `python manage.py createsuperuser` (via the Render shell) and add books and categories.
 
-The existing live deployment is at https://library-management-qonj.onrender.com.
+The existing live deployment is at https://library-management-five-gray.vercel.app.
 
 ## Security Notes
 
